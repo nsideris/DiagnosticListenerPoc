@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "JXf3TbwtYGarpvBU+0bSsp2GQbQHv5KVG2+BbFlcUGHdVzvGOvzdMDXKV+jWoaVVLtIgpNnQ7SoCZw81W9SEYQ==",
+  "dgSpecHash": "rOW/3N5PcE5aQaw6N2sdfmuZzW5YCqd789/Drw5fwwJ3uFMeAEu4ub5JF0/6TFUckyMOCjth2a0Hi4hM4z83og==",
   "success": true,
-  "projectFilePath": "C:\\Users\\n.sideris\\source\\repos\\DiagnosticListener\\DiagnosticListener\\DiagnosticListener.csproj",
+  "projectFilePath": "C:\\Projects\\DiagnosticListenerPoc\\DiagnosticListener\\DiagnosticListener.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\n.sideris\\.nuget\\packages\\microsoft.aspnet.webapi.client\\5.2.7\\microsoft.aspnet.webapi.client.5.2.7.nupkg.sha512",
     "C:\\Users\\n.sideris\\.nuget\\packages\\microsoft.aspnet.webapi.core\\5.2.7\\microsoft.aspnet.webapi.core.5.2.7.nupkg.sha512",

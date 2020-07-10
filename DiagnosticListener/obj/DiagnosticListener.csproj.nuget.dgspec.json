@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\n.sideris\\source\\repos\\DiagnosticListener\\DiagnosticListener\\DiagnosticListener.csproj": {}
+    "C:\\Projects\\DiagnosticListenerPoc\\DiagnosticListener\\DiagnosticListener.csproj": {}
   },
   "projects": {
-    "C:\\Users\\n.sideris\\source\\repos\\DiagnosticListener\\DiagnosticListener\\DiagnosticListener.csproj": {
+    "C:\\Projects\\DiagnosticListenerPoc\\DiagnosticListener\\DiagnosticListener.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\n.sideris\\source\\repos\\DiagnosticListener\\DiagnosticListener\\DiagnosticListener.csproj",
+        "projectUniqueName": "C:\\Projects\\DiagnosticListenerPoc\\DiagnosticListener\\DiagnosticListener.csproj",
         "projectName": "DiagnosticListener",
-        "projectPath": "C:\\Users\\n.sideris\\source\\repos\\DiagnosticListener\\DiagnosticListener\\DiagnosticListener.csproj",
+        "projectPath": "C:\\Projects\\DiagnosticListenerPoc\\DiagnosticListener\\DiagnosticListener.csproj",
         "packagesPath": "C:\\Users\\n.sideris\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\n.sideris\\source\\repos\\DiagnosticListener\\DiagnosticListener\\obj\\",
+        "outputPath": "C:\\Projects\\DiagnosticListenerPoc\\DiagnosticListener\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
