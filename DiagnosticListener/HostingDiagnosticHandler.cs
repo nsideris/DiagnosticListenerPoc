@@ -14,8 +14,6 @@ namespace DiagnosticListener
         public HostingDiagnosticHandler(ICalculator calculator)
         {
             _calculator = calculator;
-            _diagnosticSourceSubscriber = new DiagnosticSourceSubscriber();
-            _diagnosticSourceSubscriber.Subscribe();
         }
 
         public Task StartAsync(CancellationToken cancellationToken)

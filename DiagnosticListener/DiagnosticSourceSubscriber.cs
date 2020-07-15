@@ -1,18 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Diagnostics;
 
 namespace DiagnosticListener
 {
     public class DiagnosticSourceSubscriber : IDisposable, IObserver<System.Diagnostics.DiagnosticListener>
     {
         private IDisposable _allSourcesSubscription;
+        private List<IDisposable> _listenerSubscriptions;
+        private readonly Func<string, ListenerHandler> _handlerFactory;
+        private readonly Func<System.Diagnostics.DiagnosticListener, bool> _diagnosticSourceFilter;
+        private readonly Func<string, object, object, bool> _isEnabledFilter;
+        private long disposed;
 
+        public DiagnosticSourceSubscriber(Func<string, ListenerHandler> handlerFactory,
+            Func<System.Diagnostics.DiagnosticListener, bool> diagnosticSourceFilter,
+            Func<string, object, object, bool> isEnabledFilter)
+        {
+            _listenerSubscriptions = new List<IDisposable>();
+            _handlerFactory = handlerFactory;
+            _diagnosticSourceFilter = diagnosticSourceFilter;
+            _isEnabledFilter = isEnabledFilter;
+        }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            if (Interlocked.CompareExchange(ref disposed, 1L, 0L) == 1L)
+                return;
+            lock (_listenerSubscriptions)
+            {
+                foreach (var listenerSubscription in _listenerSubscriptions)
+                    listenerSubscription?.Dispose();
+                _listenerSubscriptions.Clear();
+            }
         }
 
         public void OnCompleted()
@@ -26,23 +46,22 @@ namespace DiagnosticListener
         }
 
         public void OnNext(System.Diagnostics.DiagnosticListener listener)
+
         {
-            switch (listener.Name)
+            if (Interlocked.Read(ref disposed) != 0L || !_diagnosticSourceFilter(listener))
+                return;
+
+            var diagnosticSourceListener = new DiagnosticSourceListener(_handlerFactory(listener.Name));
+
+
+            var disposable = _isEnabledFilter == null
+                ? listener.Subscribe((IObserver<KeyValuePair<string, object>>) diagnosticSourceListener)
+                : listener.Subscribe((IObserver<KeyValuePair<string, object>>) diagnosticSourceListener,
+                    _isEnabledFilter);
+
+            lock (_listenerSubscriptions)
             {
-                case "DiagnosticListener.Calculator":
-                {
-                    listener.Subscribe(delegate(KeyValuePair<string, object> evnt)
-                    {
-                        var eventName = evnt.Key;
-                        var payload = evnt.Value;
-                        if (eventName == "DiagnosticListener.Calculator.SpecificEvent")
-                        {
-                            var a = Activity.Current; //Current activity
-                            Console.WriteLine($"{evnt.Key} {evnt.Value} {a.ParentId}");
-                        }
-                    });
-                }
-                    break;
+                _listenerSubscriptions.Add(disposable);
             }
         }
 

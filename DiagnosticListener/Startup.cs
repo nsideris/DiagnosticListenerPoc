@@ -16,6 +16,11 @@ namespace DiagnosticListenerSample
             services.AddHostedService<HostingDiagnosticHandler>();
             services.AddSingleton<ICalculator>(x => new Calculator());
 
+            var diagnosticSourceSubscriber = new DiagnosticSourceSubscriber(
+                name => new PoolPointsListener(name),
+                x => x.Name == PoolPointsListener.DiagnosticName, null);
+            diagnosticSourceSubscriber.Subscribe();
+
 
             var pr = services.BuildServiceProvider();
         }

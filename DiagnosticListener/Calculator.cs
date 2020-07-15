@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace DiagnosticListener
 {
@@ -9,15 +10,22 @@ namespace DiagnosticListener
 
     public class Calculator : ICalculator
     {
-        private readonly DiagnosticSource _source = new System.Diagnostics.DiagnosticListener("DiagnosticListener.Calculator");
+        private readonly DiagnosticSource _source =
+            new System.Diagnostics.DiagnosticListener(PoolPointsListener.DiagnosticName);
+
+
+        private DiagnosticSourceSubscriber _diagnosticSourceSubscriber;
 
         public void DoSth()
         {
-            if (_source.IsEnabled("DiagnosticListener.Calculator"))
-            {
+            
+            _diagnosticSourceSubscriber = new DiagnosticSourceSubscriber(
+                name => new SomeOtherListener(name),
+                x => x.Name == "gsdgdsgsdgsdgdsgsd", null);
+            _diagnosticSourceSubscriber.Subscribe();
 
-                _source.Write("DiagnosticListener.Calculator.SpecificEvent", new { a = "aa", b = "b" });
-            }
+            _source.Write(PoolPointsListener.DiagnosticName,
+                new PoolPointsListener.SourceContext() {A = "aa", B = "b"});
         }
     }
 }
