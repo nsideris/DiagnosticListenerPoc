@@ -10,7 +10,7 @@ namespace DiagnosticListener
 
         public DiagnosticSourceListener(ListenerHandler handler)
         {
-            ListenerHandler listenerHandler = handler;
+            var listenerHandler = handler;
             if (listenerHandler == null)
                 throw new ArgumentNullException(nameof(handler));
             this.handler = listenerHandler;
@@ -28,28 +28,22 @@ namespace DiagnosticListener
 
         public void OnNext(KeyValuePair<string, object> value)
         {
-            if (Activity.Current == null)
-            {
-// AdapterEventSource.Log.NullActivity(value.Key);
-            }
-            else
-            {
+            if (Activity.Current != null)
                 try
                 {
                     if (value.Key.EndsWith("Start"))
-                        this.handler.OnStartActivity(Activity.Current, value.Value);
+                        handler.OnStartActivity(Activity.Current, value.Value);
                     else if (value.Key.EndsWith("Stop"))
-                        this.handler.OnStopActivity(Activity.Current, value.Value);
+                        handler.OnStopActivity(Activity.Current, value.Value);
                     else if (value.Key.EndsWith("Exception"))
-                        this.handler.OnException(Activity.Current, value.Value);
+                        handler.OnException(Activity.Current, value.Value);
                     else
-                        this.handler.OnCustom(value.Key, Activity.Current, value.Value);
+                        handler.OnCustom(value.Key, Activity.Current, value.Value);
                 }
                 catch (Exception ex)
                 {
-                    //  AdapterEventSource.Log.UnknownErrorProcessingEvent(this.handler?.SourceName, value.Key, ex);
+                    //Just Log Should never fail the process
                 }
-            }
         }
     }
 }
