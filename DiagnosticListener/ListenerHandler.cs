@@ -1,15 +1,18 @@
 ﻿using System.Diagnostics;
-using System.Threading.Tasks;
 
 namespace DiagnosticListener
 {
     public abstract class ListenerHandler
     {
         public string SourceName { get; }
+        protected readonly SpanTracer Tracer;
 
         protected ListenerHandler(string sourceName)
         {
             SourceName = sourceName;
+            var activity = new Activity("ThisIsANewActivity");
+
+            Tracer = new SpanTracer(activity);
         }
 
         public virtual void OnStartActivity(Activity activity, object payload)

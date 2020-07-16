@@ -7,7 +7,7 @@ namespace DiagnosticListener
     public class DiagnosticSourceSubscriber : IDisposable, IObserver<System.Diagnostics.DiagnosticListener>
     {
         private IDisposable _allSourcesSubscription;
-        private List<IDisposable> _listenerSubscriptions;
+        private readonly List<IDisposable> _listenerSubscriptions;
         private readonly Func<string, ListenerHandler> _handlerFactory;
         private readonly Func<System.Diagnostics.DiagnosticListener, bool> _diagnosticSourceFilter;
         private readonly Func<string, object, object, bool> _isEnabledFilter;
@@ -50,6 +50,14 @@ namespace DiagnosticListener
         {
             if (Interlocked.Read(ref disposed) != 0L || !_diagnosticSourceFilter(listener))
                 return;
+
+            lock (_listenerSubscriptions)
+            {
+                if (_listenerSubscriptions.Contains(listener))
+                {
+                    return;
+                }
+            }
 
             var diagnosticSourceListener = new DiagnosticSourceListener(_handlerFactory(listener.Name));
 

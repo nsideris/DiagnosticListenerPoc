@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 
 namespace DiagnosticListener
 {
@@ -12,19 +10,20 @@ namespace DiagnosticListener
 
         public override void OnStartActivity(Activity activity, object payload)
         {
-            throw new NotImplementedException();
+            Tracer.BeginScope();
         }
 
         public override void OnStopActivity(Activity activity, object payload)
         {
-            throw new NotImplementedException();
+            ProcessEvent(activity, payload);
+            Tracer.Dispose();
         }
 
         public override void OnCustom(string name, Activity activity, object payload)
         {
-            Task.Run(async () => await ProcessEvent(activity, payload));
+            Tracer.SetAttribute(name, payload);
         }
 
-        public abstract Task ProcessEvent(Activity activity, object payload);
+        public abstract void ProcessEvent(Activity activity, object payload);
     }
 }

@@ -1,31 +1,42 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace DiagnosticListener
 {
     public interface ICalculator
     {
-        void DoSth();
+        Task DoSth();
     }
 
     public class Calculator : ICalculator
     {
-        private readonly DiagnosticSource _source =
-            new System.Diagnostics.DiagnosticListener(PoolPointsListener.DiagnosticName);
-
-
-        private DiagnosticSourceSubscriber _diagnosticSourceSubscriber;
-
-        public void DoSth()
+        public async Task DoSth()
         {
-            
-            _diagnosticSourceSubscriber = new DiagnosticSourceSubscriber(
-                name => new SomeOtherListener(name),
-                x => x.Name == "gsdgdsgsdgsdgdsgsd", null);
-            _diagnosticSourceSubscriber.Subscribe();
+            DiagnosticSources.PoolPointsDiagnosticSource.StartDiagnostic(PoolPointsListener.DiagnosticName);
 
-            _source.Write(PoolPointsListener.DiagnosticName,
+            DiagnosticSources.PoolPointsDiagnosticSource.Write(PoolPointsListener.Activity1,
                 new PoolPointsListener.SourceContext() {A = "aa", B = "b"});
+
+            var a = new CalculatorConnected();
+            await a.DoSthElse();
+
+            await DoSthelseAsync1();
+
+            DiagnosticSources.PoolPointsDiagnosticSource.StopDiagnostic(PoolPointsListener.DiagnosticName);
+        }
+
+
+        public async Task DoSthelseAsync1()
+        {
+            DiagnosticSources.SomeOtherDiagnosticSource.StartDiagnostic(SomeOtherListener.DiagnosticName);
+
+            DiagnosticSources.SomeOtherDiagnosticSource.Write(SomeOtherListener.Activity1,
+                new SomeOtherListener.SourceContext() {A = "nis", B = "bs"});
+
+
+            DiagnosticSources.SomeOtherDiagnosticSource.StopDiagnostic(SomeOtherListener.DiagnosticName);
+            await Task.Delay(500);
         }
     }
 }

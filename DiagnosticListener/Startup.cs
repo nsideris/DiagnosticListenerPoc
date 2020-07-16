@@ -21,6 +21,11 @@ namespace DiagnosticListenerSample
                 x => x.Name == PoolPointsListener.DiagnosticName, null);
             diagnosticSourceSubscriber.Subscribe();
 
+            var diagnosticSourceSubscriber1 = new DiagnosticSourceSubscriber(
+                name => new SomeOtherListener(name),
+                x => x.Name == SomeOtherListener.DiagnosticName, null);
+            diagnosticSourceSubscriber1.Subscribe();
+
 
             var pr = services.BuildServiceProvider();
         }

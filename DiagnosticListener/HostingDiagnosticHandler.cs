@@ -9,25 +9,25 @@ namespace DiagnosticListener
     public class HostingDiagnosticHandler : IHostedService
     {
         private readonly ICalculator _calculator;
-        private readonly DiagnosticSourceSubscriber _diagnosticSourceSubscriber;
 
         public HostingDiagnosticHandler(ICalculator calculator)
         {
             _calculator = calculator;
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
             var correlationId = Guid.NewGuid().ToString();
             var activity = new Activity("Activity");
-            activity.SetParentId(correlationId);
+
             Console.WriteLine($"Starting Activity {correlationId}");
 
             try
             {
                 activity.Start();
-                _calculator.DoSth();
-                return Task.CompletedTask;
+                activity.AddBaggage("CorrelationId",
+                    correlationId); //All new activities will have the correlation Id with them
+                await _calculator.DoSth();
             }
             finally
             {
