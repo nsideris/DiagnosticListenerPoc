@@ -7,44 +7,42 @@ namespace DiagnosticListener
 {
     public class DiagnosticSourceListener : IObserver<KeyValuePair<string, object>>
     {
-        private readonly ListenerHandler handler;
+        private readonly ListenerHandler _handler;
 
         public DiagnosticSourceListener(ListenerHandler handler)
         {
-            var listenerHandler = handler;
-            if (listenerHandler == null)
-                throw new ArgumentNullException(nameof(handler));
-            this.handler = listenerHandler;
+            _handler = handler ?? throw new ArgumentNullException(nameof(handler));
         }
 
         public void OnCompleted()
         {
-            throw new NotImplementedException();
         }
 
         public void OnError(Exception error)
         {
-            throw new NotImplementedException();
         }
 
         public void OnNext(KeyValuePair<string, object> value)
         {
-            if (Activity.Current != null)
+            if (Activity.Current != null
+            ) //We always pass the activity as will contain useFull Data shared across multiple listeners
+            {
                 try
                 {
                     if (value.Key.EndsWith("Start"))
-                        handler.OnStartActivity(Activity.Current, value.Value);
+                        _handler.OnStartActivity(Activity.Current, value.Value);
                     else if (value.Key.EndsWith("Stop"))
-                        handler.OnStopActivity(Activity.Current, value.Value);
+                        _handler.OnStopActivity(Activity.Current, value.Value);
                     else if (value.Key.EndsWith("Exception"))
-                        handler.OnException(Activity.Current, value.Value);
+                        _handler.OnException(Activity.Current, value.Value);
                     else
-                        handler.OnCustom(value.Key, Activity.Current, value.Value);
+                        _handler.OnCustom(value.Key, Activity.Current, value.Value);
                 }
                 catch (Exception ex)
                 {
                     //Just Log Should never fail the process
                 }
+            }
         }
     }
 }
