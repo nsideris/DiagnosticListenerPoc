@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using DiagnosticListener;
+using DiagnosticListener.ListenerHandlers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;

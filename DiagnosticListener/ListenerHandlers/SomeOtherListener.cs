@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace DiagnosticListener
+namespace DiagnosticListener.ListenerHandlers
 {
     public class SomeOtherListener : SqlClientDiagnosticListener
     {

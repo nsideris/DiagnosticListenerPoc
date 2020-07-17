@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
+using DiagnosticListener.ListenerHandlers;
 
 namespace DiagnosticListener
 {

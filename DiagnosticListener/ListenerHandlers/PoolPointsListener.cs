@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace DiagnosticListener
+namespace DiagnosticListener.ListenerHandlers
 {
     public class PoolPointsListener : SqlClientDiagnosticListener
     {
